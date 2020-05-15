@@ -1,0 +1,21 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f710aa5bb8a, pid=15442, tid=15459
+#
+# JRE version: Java(TM) SE Runtime Environment 18.9 (11.0.7+8) (build 11.0.7+8-LTS)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM 18.9 (11.0.7+8-LTS, mixed mode, tiered, compressed oops, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libjimage.so+0x4b8a]  ImageFileReader::verify_location(ImageLocation&, char const*) const+0x8a
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/share/apport/apport %p %s %c %d %P %E" (or dumping to /home/nineleaps/Documents/Hackathon/publishers-service/core.15442)
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:37007 -javaagent:/home/nineleaps/Downloads/Software/spring-tool-suite-4-4.5.1.RELEASE-e4.14.0-linux.gtk.x86_64/sts-4.5.1.RELEASE/configuration/org.eclipse.osgi/237/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 com.publisher.PublishersServiceApplication
+
+Host: 
