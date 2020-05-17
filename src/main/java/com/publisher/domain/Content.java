@@ -6,32 +6,23 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-@Table("publisher")
-public class Publisher {
+@Table("content")
+public class Content {
 	@PrimaryKey
+	@Column("content_id")
 	private UUID id = UUID.randomUUID();
 
-	@Column("author")
-	private String author;
-
-	@Column("title")
+	@Column("content_title")
 	private String title;
 
-	@Column("message")
+	@Column("content_message")
 	private String message;
+
+	@Column("author_id")
+	private UUID author_id;
 
 	public UUID getId() {
 		return id;
-	}
-
-	
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
 	}
 
 	public String getTitle() {
@@ -50,9 +41,17 @@ public class Publisher {
 		this.message = message;
 	}
 
+	public UUID getAuthor_id() {
+		return author_id;
+	}
+
+	public void setAuthor_id(UUID author_id) {
+		this.author_id = author_id;
+	}
+
 	@Override
 	public String toString() {
-		return "Publisher [id=" + id + ", author=" + author + ", title=" + title + ", message=" + message + "]";
+		return "Content [id=" + id + ", title=" + title + ", message=" + message + ", author_id=" + author_id + "]";
 	}
 
 }

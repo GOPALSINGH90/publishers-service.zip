@@ -3,8 +3,6 @@ package com.publisher.controller;
 import java.util.List;
 import java.util.UUID;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,34 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.publisher.domain.Publisher;
-import com.publisher.serviceImpl.PublishServiceImpl;
+import com.publisher.domain.Content;
+import com.publisher.serviceImpl.ContentServiceImpl;
 
 @RestController
-@RequestMapping("publisher")
-public class PublisherController {
+@RequestMapping("api/content")
+public class ContentController {
 
 	@Autowired
-	private PublishServiceImpl publishService;
+	private ContentServiceImpl contentService;
 
-	@PostMapping("/")
-	public Publisher createMessge(@RequestBody Publisher publisher) {
-		Publisher createdPublisher = publishService.createPublish(publisher);
-		return createdPublisher;
+	@PostMapping()
+	public Content createMessge(@RequestBody Content content) {
+		Content createdContent = contentService.createContent(content);
+		return createdContent;
 	}
 
-	@GetMapping("/")
-	public List<Publisher> getPublisher() {
-		return publishService.getPublisher();
+	@GetMapping()
+	public List<Content> getPublisher() {
+		return contentService.getContents();
 	}
 
-	@PutMapping("/publish/{id}")
-	public Publisher updatePublished(@RequestBody Publisher publisher, @PathParam(value = "id") UUID id) {
-		return publishService.updatePublisher(publisher, id);
+	@PutMapping("/{id}")
+	public Content updatePublished(@RequestBody Content content, @PathVariable UUID id) {
+		return contentService.updateContent(content, id);
 	}
 
-	@DeleteMapping("/publish/{id}")
-	public void delete(@PathParam(value = "id") UUID id) {
-		publishService.deletePublisher(id);
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable UUID id) {
+		contentService.deleteContent(id);
+	}
+
+	@GetMapping("/{author_id}/content/{content_id}")
+	public Content publishContent(@PathVariable UUID author_id, @PathVariable UUID content_id) {
+		Content contens = contentService.publishContent(author_id, content_id);
+		return contens;
 	}
 }

@@ -1,7 +1,6 @@
 package com.publisher.serviceImpl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,63 +9,76 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.publisher.domain.Publisher;
-import com.publisher.repository.PublisherRepository;
-import com.publisher.service.PublishService;
+import com.publisher.domain.Content;
+import com.publisher.repository.ContentRepository;
+import com.publisher.service.ContentService;
 
 @Service
-public class PublishServiceImpl implements PublishService {
+public class ContentServiceImpl implements ContentService {
 
 	@Autowired
-	private PublisherRepository publisherRepository;
+	private ContentRepository contentRepository;
+
+	@Autowired
+	private AuthoreServiceImpl authoreServiceImpl;
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@Override
-	public Publisher createPublish(Publisher publisher) {
-		Publisher createdPublisher = publisherRepository.save(publisher);
+	public Content createContent(Content content) {
+		Content createdContent = contentRepository.save(content);
+		authoreServiceImpl.addContentsInAuthor(createdContent.getId(), createdContent.getAuthor_id());
+		return createdContent;
+	}
+
+	@Override
+	public List<Content> getContents() {
+		List<Content> contents = contentRepository.findAll();
+		return contents;
+	}
+
+	@Override
+	public void deleteContent(UUID id) {
+		Optional<Content> optionalContent = contentRepository.findById(id);
+		if (!optionalContent.isEmpty()) {
+			contentRepository.deleteById(id);
+		}
+	}
+
+	@Override
+	public Content updateContent(Content content, UUID id) {
+		Optional<Content> optionalContent = contentRepository.findById(id);
+		Content dbContent;
+		if (!optionalContent.isEmpty()) {
+			dbContent = optionalContent.get();
+			dbContent.setTitle(content.getTitle());
+			dbContent.setMessage(content.getMessage());
+			contentRepository.save(dbContent);
+		} else {
+			dbContent = contentRepository.save(content);
+		}
+		return dbContent;
+	}
+
+	public Content publishContent(UUID author_id, UUID content_id) {
+		Content contents = contentRepository.findByAuthor_id(content_id, author_id);
 		ObjectMapper objectMapper = new ObjectMapper();
-		String publishAsString = "";
+		String contentAsString = "";
 		try {
-			objectMapper.writeValue(new File("target/order.json"), createdPublisher);
-			publishAsString = objectMapper.writeValueAsString(createdPublisher);
-		} catch (Exception exception) {
+			objectMapper.writeValue(new File("target/contents.json"), contents);
+			contentAsString = objectMapper.writeValueAsString(contents);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		sendMessage(contentAsString);
 
-		kafkaTemplate.send("nineleaps", publishAsString);
-		return createdPublisher;
-
+		return contents;
 	}
 
-	@Override
-	public List<Publisher> getPublisher() {
-		return publisherRepository.findAll();
-	}
-
-	@Override
-	public void deletePublisher(UUID id) {
-
-	}
-
-	@Override
-	public Publisher updatePublisher(Publisher publisher, UUID id) {
-		Publisher updatedPublisher; 
-		Optional<Publisher> optionalPublisher = publisherRepository.findById(id);
-		if (!optionalPublisher.isEmpty()) {
-			Publisher dbPublisher = optionalPublisher.get();
-			dbPublisher.setAuthor(publisher.getAuthor());
-			dbPublisher.setMessage(publisher.getMessage());
-			dbPublisher.setTitle(publisher.getTitle());
-			updatedPublisher = publisherRepository.save(dbPublisher);
-		}else {
-			updatedPublisher = publisherRepository.save(publisher);
-		}
-		
-		return updatedPublisher;
+	private void sendMessage(String contentAsString) {
+		kafkaTemplate.send("nineleaps", contentAsString);
 	}
 
 }

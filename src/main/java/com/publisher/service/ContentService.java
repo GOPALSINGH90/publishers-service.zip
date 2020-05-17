@@ -1,19 +1,21 @@
 package com.publisher.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.publisher.domain.Publisher;
+import org.springframework.stereotype.Service;
 
-public interface PublishService {
-	public Publisher createPublish(Publisher publisher);
+import com.publisher.domain.Content;
 
-	public List<Publisher> getPublisher();
+@Service
+public interface ContentService {
+	public Content createContent(Content conent);
 
-	public void deletePublisher(UUID id);
+	public List<Content> getContents();
 
-	public Publisher updatePublisher(Publisher publisher, UUID id);
+	public void deleteContent(UUID id);
+
+	public Content updateContent(Content conent, UUID id);
+	
+	public Content publishContent(UUID author_id, UUID content_id); 
 }
