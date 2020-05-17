@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.publisher.domain.Author;
-import com.publisher.serviceImpl.AuthoreServiceImpl;
+import com.publisher.serviceImpl.AuthorServiceImpl;
 
 @RestController
 @RequestMapping("api/author")
-public class AuthoreController {
+public class AuthorController {
 
 	@Autowired
-	private AuthoreServiceImpl authoreService;
+	private AuthorServiceImpl authoreService;
 
 	@PostMapping()
 	public Author createMessge(@RequestBody Author author) {

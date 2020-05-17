@@ -9,60 +9,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.publisher.domain.Author;
-import com.publisher.repository.AuthoreRepository;
+import com.publisher.repository.AuthorRepository;
 import com.publisher.service.AuthoreService;
 
 @Service
-public class AuthoreServiceImpl implements AuthoreService {
+public class AuthorServiceImpl implements AuthoreService {
 
 	@Autowired
-	private AuthoreRepository authoreRepository;
+	private AuthorRepository authorRepository;
 
 	@Override
 	public Author createAuthor(Author author) {
-		return authoreRepository.save(author);
+		return authorRepository.save(author);
 	}
 
 	@Override
 	public List<Author> getAuthors() {
-		return authoreRepository.findAll();
+		return authorRepository.findAll();
 	}
 
 	@Override
 	public void deleteAuthor(UUID id) {
-		authoreRepository.deleteById(id);
+		authorRepository.deleteById(id);
 	}
 
 	@Override
 	public Author updateAuthor(Author author, UUID id) {
-		Optional<Author> optionalAuthor = authoreRepository.findById(id);
+		Optional<Author> optionalAuthor = authorRepository.findById(id);
 		Author dbAuthor;
 		if (!optionalAuthor.isEmpty()) {
 			dbAuthor = optionalAuthor.get();
 			dbAuthor.setName(dbAuthor.getName());
-			dbAuthor = authoreRepository.save(dbAuthor);
+			dbAuthor = authorRepository.save(dbAuthor);
 
 		} else {
-			dbAuthor = authoreRepository.save(author);
+			dbAuthor = authorRepository.save(author);
 		}
 		return dbAuthor;
 	}
 
 	@Override
 	public String addSubscriber(UUID id, String email) {
-		Optional<Author> authorOpt = authoreRepository.findById(id);
+		Optional<Author> authorOpt = authorRepository.findById(id);
 		if (!authorOpt.isEmpty()) {
 			Author author = authorOpt.get();
 			List<String> subscriber = author.getSubscriber();
 			subscriber.add(email);
 			author.setSubscriber(subscriber);
-			authoreRepository.save(author);
+			authorRepository.save(author);
 		}
 		return "added";
 	}
 
 	public void addContentsInAuthor(UUID content_id, UUID author_id) {
-		Optional<Author> authorOpt = authoreRepository.findById(author_id);
+		Optional<Author> authorOpt = authorRepository.findById(author_id);
 		if (!authorOpt.isEmpty()) {
 			Author author = authorOpt.get();
 			List<UUID> contents = author.getContent();
@@ -74,7 +74,7 @@ public class AuthoreServiceImpl implements AuthoreService {
 				content_ids.add(content_id);
 				author.setContent(content_ids);
 			}
-			authoreRepository.save(author);
+			authorRepository.save(author);
 		}
 	}
 }

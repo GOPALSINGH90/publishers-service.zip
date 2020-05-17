@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.publisher.domain.Author;
 
 @Repository
-public interface AuthoreRepository  extends CassandraRepository<Author, UUID>{
+public interface AuthorRepository  extends CassandraRepository<Author, UUID>{
 
 }

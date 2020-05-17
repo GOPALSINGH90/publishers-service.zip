@@ -21,7 +21,7 @@ public class ContentServiceImpl implements ContentService {
 	private ContentRepository contentRepository;
 
 	@Autowired
-	private AuthoreServiceImpl authoreServiceImpl;
+	private AuthorServiceImpl authorServiceImpl;
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
@@ -29,7 +29,7 @@ public class ContentServiceImpl implements ContentService {
 	@Override
 	public Content createContent(Content content) {
 		Content createdContent = contentRepository.save(content);
-		authoreServiceImpl.addContentsInAuthor(createdContent.getId(), createdContent.getAuthor_id());
+		authorServiceImpl.addContentsInAuthor(createdContent.getId(), createdContent.getAuthor_id());
 		return createdContent;
 	}
 
