@@ -11,8 +11,8 @@
 	</parent>
 	<groupId>com.publisher</groupId>
 	<artifactId>publishers-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>publishers-service</name>
+	<name>publisherservice</name>
+	<packaging>jar</packaging>
 	<description> project for publishers-service</description>
 
 	<properties>
